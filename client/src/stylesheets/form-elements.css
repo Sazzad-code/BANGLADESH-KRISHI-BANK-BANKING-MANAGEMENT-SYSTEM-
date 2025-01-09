@@ -1,0 +1,26 @@
+
+
+input , select , textarea{
+    border:1px solid rgb(86,86,86);
+    padding: 8px 10px;
+    width: 100%;
+
+input :focus , select :focus, textarea :focus{
+    border:1px solid rgb(119, 19, 19);
+    outline: none;
+}
+
+.primary-contained-btn{
+    background-color: var(primary);
+    color: rgb(115, 219, 115);
+    padding: 8px 20px;
+    text-transform: uppercase;
+}
+
+.primary-outline-btn{
+    background-color: var(primary);
+    color: rgb(136, 228, 136);
+    padding: 8px 20px;
+    text-transform: uppercase;
+    border: 1px solid var(--primary);
+}
