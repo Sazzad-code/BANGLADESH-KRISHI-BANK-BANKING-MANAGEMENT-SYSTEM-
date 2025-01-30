@@ -23,7 +23,9 @@ function Register() {
     };
 
     return (
-        <div className="m-5">
+        <div className="reg-bg flex items-center justify-center h-screen ">
+
+        <div className="m-5"> 
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl">BANGLADESH KRISHI BANK -  REGISTER</h1>
                 <h1 className="text-sm underline"
@@ -112,6 +114,7 @@ function Register() {
 
 
             </Form>
+        </div>
         </div>
     )
 }

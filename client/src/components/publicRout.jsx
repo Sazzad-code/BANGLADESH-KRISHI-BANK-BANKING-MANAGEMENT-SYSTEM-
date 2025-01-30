@@ -11,7 +11,7 @@ function PublicRoute(props) {
     }, []);
 
     return (
-    <div>{props.children}</div>
+    <div className="bg-primary">{props.children}</div>
 )
 }
 

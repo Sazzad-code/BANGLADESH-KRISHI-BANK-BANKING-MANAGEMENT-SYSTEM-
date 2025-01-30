@@ -13,9 +13,14 @@ app.use(express.json())
 
 const dbConfig = require('./config/dbConfig');
 const usersRoute = require('./routes/usersRoute');
+const transactionsRoute = require('./routes/transactionsRoute');
+const loansRoute = require('./routes/loansRoute');
+
 
 
 app.use('/api/users', usersRoute);
+app.use('/api/transactions', transactionsRoute);
+app.use('/api/loans', loansRoute);
 
 const PORT = process.env.PORT || 5000;
 
