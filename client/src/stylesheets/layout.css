@@ -135,3 +135,78 @@
   .dropdown:hover .dropbtn {
     background-color: #3e8e41;
   }
+
+  .home-container {
+    padding: 20px;
+  }
+  
+  .swiper-container img {
+    width: 505px;
+    object-fit: cover;
+  }
+  
+  .welcome {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .dashboard-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+  }
+  
+  .card {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 23%;
+    text-align: center;
+    color: white;
+  }
+  
+  .account-card {
+    background-color: #4CAF50;
+  }
+  
+  .balance-card {
+    background-color: #2196F3;
+  }
+  
+  .profile-card {
+    background-color: #FF9800;
+  }
+  
+  .transactions-card {
+    background-color: #F44336;
+  }
+  .help-card {
+    background-color: #d6136e;
+  }
+  .login-card {
+    background-color: #ffffff;
+  }
+  
+  .card h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .card p {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  
+  .intro {
+    margin-top: 40px;
+    font-size: 16px;
+  }
+  
+  .sidebar-profile {
+    margin-top: 40px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+  }
+  

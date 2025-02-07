@@ -3,7 +3,7 @@ import React from "react";
 function PageTitle ({title}){
     return(
         <div>
-            <h1 className='text-xl uppercase'>{title}</h1>
+            <h1 className='text-xl uppercase text-center'>{title}</h1>
         </div>
     )
 }

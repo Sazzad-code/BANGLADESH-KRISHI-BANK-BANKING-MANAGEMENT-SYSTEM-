@@ -25,10 +25,10 @@ function Login() {
     return (
         <div className="bg-primary flex items-center justify-center h-screen ">
 
-            <div className="card w-400 p-2 ">
+            <div className="card login-card w-400 p-2 ">
                 <div className="flex items-center justify-between" >
 
-                    <h1 className="text-2xl">BANGLADESH KRISHI BANK-LOGIN</h1>
+                    <h1 className="text-2xl text-black">BANGLADESH KRISHI BANK-LOGIN</h1>
 
                     
                 </div>

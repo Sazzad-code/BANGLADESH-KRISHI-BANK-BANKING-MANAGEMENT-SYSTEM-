@@ -74,12 +74,7 @@ function DefaultLayout({ children }) {
             onclick: () => navigate("/loan"),
             path: "/loan"
         },
-        {
-            title: "profile",
-            icon: <i class="ri-user-3-line"></i>,
-            onclick: () => navigate("/profile"),
-            path: "/profile"
-        },
+        
         {
             title: "Logout",
             icon: <i class="ri-logout-box-line"></i>,

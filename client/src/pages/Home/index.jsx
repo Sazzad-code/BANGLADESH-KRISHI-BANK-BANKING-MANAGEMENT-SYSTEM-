@@ -1,16 +1,12 @@
-
+import { useEffect, useState } from "react";
 import { message } from "antd";
-
 import PageTitle from "../../components/PageTitle";
-import { useSelector } from "react-redux";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/autoplay";
-import { Autoplay } from "swiper/modules";
+import { useSelector, useDispatch } from "react-redux";
+import { GetTransactionsOfUser } from "../../apicalls/transactions";
 
 function Home() {
-
-    const { user } = useSelector(state => state.users);
+    const [transactionsCount, setTransactionsCount] = useState(0); // State to hold transaction count
+    const { user } = useSelector((state) => state.users);
 
     const images = [
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXByOdoEflY5nM_kNl_E53Px5v5DVO7H2VFQ&s",
@@ -18,21 +14,76 @@ function Home() {
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxP6N7jWsi-XuQnKpr1JMdEAPPpylBP15hAg&s",
     ];
 
-    return <div>
+    // Fetch transactions and count them
+    const getTransactionsCount = async () => {
+        try {
+            const response = await GetTransactionsOfUser(); // API call to get transactions
+            if (response.success) {
+                setTransactionsCount(response.data.length); // Set the count based on the fetched data
+            } else {
+                message.error("Failed to fetch transactions.");
+            }
+        } catch (error) {
+            message.error("Error fetching transactions: " + error.message);
+        }
+    };
 
-        <div className="swiper-container">
-            <img style={{height:"400px", padding: "60px 0"}} className="w-full" src={`${images[1]}`}></img>
-    
-    </div>
-    <div className="welcome">
-            <PageTitle title={`
-            Hello ${user.firstName} ${user.lastName}, Welcome to Bangladesh Krishi Bank`} />
+    useEffect(() => {
+        if (user) {
+            getTransactionsCount(); // Fetch transactions count when user is available
+        }
+    }, [user]);
+
+    return (
+        <div className="home-container">
+            {/* Swiper Banner */}
+            <div className="swiper-container">
+                <img className="w-full" src={`${images[1]}`} alt="Bank Image" />
+            </div>
+
+            {/* Welcome Section */}
+            <div className="welcome" style={{ marginBottom: "120px" }}>
+                <PageTitle title={`Hello ${user.firstName} ${user.lastName}, Welcome to Bangladesh Krishi Bank`} />
+            </div>
+
+            {/* Conditional Rendering: Hide Dashboard for Admin */}
+            {!user.isAdmin && (
+                <div className="dashboard-container">
+                    {/* Account Number Card */}
+                    <div className="card account-card">
+                        <h2>Account Number</h2>
+                        <p>{user._id}</p>
+                    </div>
+
+                    {/* Balance Card */}
+                    <div className="card balance-card">
+                        <h2>Balance</h2>
+                        <p>BDT {user.balance || 0}</p>
+                    </div>
+
+                    {/* Profile Completion Card */}
+                    <div className="card profile-card">
+                        <h2>Profile Completion</h2>
+                        <p>{user.profileComplete ? "Completed" : "Completed"}</p>
+                    </div>
+
+                    {/* Help Line Card */}
+                    <div className="card help-card">
+                        <h2>Help Line</h2>
+                        <p>{Number} 01862484807 bkb@gmail.com</p>
+                    </div>
+
+                    {/* Transactions Card */}
+                    <div className="card transactions-card">
+                        <h2>Recent Transactions</h2>
+                        <p>{transactionsCount} transactions</p>
+                    </div>
+                </div>
+            )}
+
+            {/* Bank Introduction Section */}
         </div>
-        <div className="intro">
-            <h1 className="text-sm  mb-4">Bangladesh Krishi Bank (BKB) is a state-owned specialized financial institution in Bangladesh, established with the primary goal of promoting and supporting the agricultural sector, which is the backbone of the country’s economy. Since its inception in 1973 under the Bangladesh Krishi Bank Order, BKB has been playing a vital role in uplifting rural livelihoods by providing financial assistance to farmers, agribusinesses, and other related industries.</h1>
-            <h1 className="text-sm  mb-4">With a vast network of branches across urban and rural areas, Bangladesh Krishi Bank is committed to driving economic growth by empowering farmers and ensuring sustainable development in agriculture. The institution's emphasis on innovation and community-focused banking solutions underscores its dedication to creating a prosperous and self-reliant rural economy.</h1>
-        </div>
-    </div>
+    );
 }
 
 export default Home;

@@ -83,65 +83,60 @@ router.post("/accept-loan", authMiddleware, async (req, res) => {
     try {
         const { requestId } = req.body;
 
-        // Find the loan request by ID
-        const request = await Request.findById(requestId).populate("sender receiver");
-        
+        // Find the loan request
+        const request = await Request.findById(requestId).populate("sender");
         if (!request) {
-            return res.status(404).send({
-                success: false,
-                message: "Loan request not found.",
-            });
+            return res.status(404).json({ success: false, message: "Loan request not found." });
         }
 
-        // Update loan status to 'success' (accepted)
-        request.status = 'success';
+        if (request.status !== "pending") {
+            return res.status(400).json({ success: false, message: "Loan already processed." });
+        }
+
+        // Find the user (sender) and update their balance
+        const sender = await User.findById(request.sender._id);
+        if (!sender) {
+            return res.status(404).json({ success: false, message: "Sender not found." });
+        }
+
+        sender.balance += request.amount;  // Transfer the loan amount to user
+        await sender.save();
+
+        // Update loan status to success
+        request.status = "success";
         await request.save();
 
-        // Transfer funds (this will vary depending on your implementation)
-        const receiver = await User.findById(request.receiver._id);
-        if (receiver) {
-            // Simulate transferring funds by updating the receiver's balance
-            receiver.balance += request.amount; // Assuming balance field exists
-            await receiver.save();
-        }
-
-        res.send({
-            success: true,
-            message: "Loan request accepted and funds transferred.",
-            data: request,
-        });
+        res.json({ success: true, message: "Loan accepted, funds transferred.", data: request });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+
 
 // Reject loan request
 router.post("/reject-loan", authMiddleware, async (req, res) => {
     try {
         const { requestId } = req.body;
 
-        // Find the loan request by ID
+        // Find the loan request
         const request = await Request.findById(requestId);
-
         if (!request) {
-            return res.status(404).send({
-                success: false,
-                message: "Loan request not found.",
-            });
+            return res.status(404).json({ success: false, message: "Loan request not found." });
         }
 
-        // Update loan status to 'rejected'
-        request.status = 'rejected';
+        if (request.status !== "pending") {
+            return res.status(400).json({ success: false, message: "Loan already processed." });
+        }
+
+        // Update loan status to rejected
+        request.status = "rejected";
         await request.save();
 
-        res.send({
-            success: true,
-            message: "Loan request rejected.",
-            data: request,
-        });
+        res.json({ success: true, message: "Loan request rejected.", data: request });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
 });
+
 
 module.exports = router;
