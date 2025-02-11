@@ -138,6 +138,7 @@ function Loan() {
                         className="bg-green-500 hover:bg-green-600 text-white border-none px-6 py-2"
                         size="large"
                         onClick={() => setShowNewRequestModal(true)}
+                        
                     >
                         Apply Loan
                     </Button>

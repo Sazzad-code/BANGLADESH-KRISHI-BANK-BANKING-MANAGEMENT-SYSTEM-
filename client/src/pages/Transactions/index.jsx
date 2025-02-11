@@ -139,12 +139,12 @@ function Transactions() {
                 <PageTitle title="Transactions" />
                 <Tooltip title="Print Transactions">
                     <Button
-                    style={{
-                        backgroundColor: " #90EE90",
-                        color: "white",
-                        border: "none",
-                        padding: "6px 16px",
-                    }}
+                        style={{
+                            backgroundColor: " #90EE90",
+                            color: "white",
+                            border: "none",
+                            padding: "6px 16px",
+                        }}
                         className="bg-gray-500 hover:bg-gray-600 border-none text-black"
                         icon={<PrinterOutlined />}
                         size="large"
@@ -156,38 +156,38 @@ function Transactions() {
             </div>
 
             {/* Centered Deposit & Transfer Buttons with More Space */}
-            <div className="flex justify-center gap-8 my-6">
-                <Tooltip title="Deposit Funds">
-                    <Button
-                        className="bg-gray-500 hover:bg-gray-600 border-none text-black px-6 py-2"
-                        icon={<PlusOutlined />}
-                        size="large"
-                        onClick={() => setShowDepositModal(true)}
-                    >
-                        Deposit
-                    </Button>
-                </Tooltip>
+            <div className="flex justify-center gap-8 my-6"style={{ marginBottom: "20px" }}>
+                {!user.isAdmin && (
+                    <>
+                        <Tooltip title="Deposit Funds">
+                            <Button
+                                className="bg-gray-500 hover:bg-gray-600 border-none text-black px-6 py-2"
+                                icon={<PlusOutlined />}
+                                size="large"
+                                onClick={() => setShowDepositModal(true)}
+                            >
+                                Deposit
+                            </Button>
+                        </Tooltip>
 
-                <Tooltip title="Transfer Funds">
-                    <Button
-                        className="bg-gray-500 hover:bg-gray-600 border-none text-black px-6 py-2"
-                        icon={<SwapOutlined />}
-                        size="large"
-                        onClick={() => setShowTransferFundsModal(true)}
-                    >
-                        Transfer
-                    </Button>
-                </Tooltip>
+                        <Tooltip title="Transfer Funds">
+                            <Button
+                                className="bg-gray-500 hover:bg-gray-600 border-none text-black px-6 py-2"
+                                icon={<SwapOutlined />}
+                                size="large"
+                                onClick={() => setShowTransferFundsModal(true)}
+                            >
+                                Transfer
+                            </Button>
+                        </Tooltip>
+                    </>
+                )}
             </div>
 
-            {/* Date Range Picker (Visible to All Users) */}
-            <div className="flex justify-between items-center my-4">
+            {/* Date Range Picker and Search Input in Same Row */}
+            <div className="flex justify-center items-center my-4 gap-6"style={{ marginBottom: "30px" }}>
                 <RangePicker onChange={filterByDate} />
-            </div>
-
-            {/* Search Input (Admin Only) */}
-            {user.isAdmin && (
-                <div className="flex justify-between items-center my-4">
+                {user.isAdmin && (
                     <Input
                         placeholder="Search by Transaction ID or User ID"
                         value={searchQuery}
@@ -195,9 +195,8 @@ function Transactions() {
                         style={{ width: 300 }}
                         allowClear
                     />
-                </div>
-            )}
-
+                )}
+            </div>
 
             {/* Transactions Table */}
             <div ref={printRef} className="p-4 bg-white">

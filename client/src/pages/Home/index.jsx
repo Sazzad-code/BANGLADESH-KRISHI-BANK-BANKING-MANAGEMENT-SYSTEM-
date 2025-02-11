@@ -63,11 +63,7 @@ function Home() {
                         <p>BDT {user.balance || 0}</p>
                     </div>
 
-                    {/* Profile Completion Card */}
-                    <div className="card profile-card">
-                        <h2>Profile Completion</h2>
-                        <p>{user.profileComplete ? "Completed" : "Completed"}</p>
-                    </div>
+                   
 
                     {/* Help Line Card */}
                     <div className="card help-card">
@@ -81,6 +77,7 @@ function Home() {
                         <p>{transactionsCount} transactions</p>
                     </div>
                 </div>
+                
             )}
 
             {/* Bank Introduction Section */}

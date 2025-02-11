@@ -23,8 +23,8 @@ function Profile() {
             <PageTitle title={`Hello ${user.firstName} ${user.lastName}, Welcome to Bangladesh Krishi Bank`} />
 
             {/* Account Information Section */}
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="bg-secondary p-4 mt-4 w-96 rounded-lg shadow-lg flex flex-col gap-2 uppercase">
+            <div className="flex items-center  justify-center min-h-screen" style={{ marginTop: "80px" }}>
+                <div className="bg-secondary p-4 mt-4 w-50 rounded-lg shadow-lg flex flex-col gap-2 uppercase">
                     <div className="flex justify-between">
                         <h1 className="text-md text-white">Account Number</h1>
                         <h1 className="text-md text-white">{user._id}</h1>
@@ -37,8 +37,8 @@ function Profile() {
             </div>
 
             {/* User Profile Details Section */}
-            <div className="flex items-center justify-center min-h-screen">
-                <div className="card p-4 mt-4 w-96 rounded-lg shadow-lg flex flex-col text-black gap-2 uppercase">
+            <div className="flex items-center justify-center min-h-screen" style={{ marginTop: "20px" }}>
+                <div className="card p-4 mt-4 w-50 rounded-lg shadow-lg flex flex-col text-black gap-2 uppercase">
                     <div className="flex justify-between">
                         <h1 className="text-md">First Name</h1>
                         <h1 className="text-md">{user.firstName}</h1>
