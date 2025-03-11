@@ -1,22 +1,46 @@
-import { message } from "antd";
+import { message, Modal, Input, Button } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+import { useState } from "react";
 import PageTitle from "../../components/PageTitle";
+import { UpdateUserDetails } from "../../apicalls/users";
 
 function Profile() {
     const { user } = useSelector((state) => state.users);
     const dispatch = useDispatch();
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editUser, setEditUser] = useState({ ...user });
 
-    const images = [
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXByOdoEflY5nM_kNl_E53Px5v5DVO7H2VFQ&s",
-        "https://ib.krishibank.org.bd/assets/images/bkb_left_logo.png",
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTxP6N7jWsi-XuQnKpr1JMdEAPPpylBP15hAg&s",
-    ];
+    const handleSaveUser = async () => {
+
+        try {
+            const response = await UpdateUserDetails({
+                userId: editUser._id,
+                firstName: editUser.firstName,
+                lastName: editUser.lastName,
+                email: editUser.email,
+                phoneNumber: editUser.phoneNumber,
+                identificationType: editUser.identificationType,
+                identificationNumber: editUser.identificationNumber,
+            });
+
+            // console.log('im here')
+
+            if (response.success) {
+                message.success(response.message);
+                setShowEditModal(false);
+            } else {
+                message.error(response.message);
+            }
+        } catch (error) {
+            message.error(error.message);
+        }
+    };
 
     return (
         <div className="profile-container">
             {/* Swiper Banner (Bank Image) */}
             <div className="swiper-container">
-                <img className="w-full" src={images[1]} alt="Bank Image" />
+                <img className="w-full" src="https://ib.krishibank.org.bd/assets/images/bkb_left_logo.png" alt="Bank Image" />
             </div>
 
             {/* Welcome Section */}
@@ -24,7 +48,7 @@ function Profile() {
 
             {/* Account Information Section */}
             <div className="flex items-center  justify-center min-h-screen" style={{ marginTop: "80px" }}>
-                <div className="bg-secondary p-4 mt-4 w-50 rounded-lg shadow-lg flex flex-col gap-2 uppercase">
+                <div className="bg-secondary p-4 mt-4 w-50 rounded-lg shadow-lg flex flex-col gap-2 uppercase " style={{padding:'20px',borderRadius: '5px'}}>
                     <div className="flex justify-between">
                         <h1 className="text-md text-white">Account Number</h1>
                         <h1 className="text-md text-white">{user._id}</h1>
@@ -63,8 +87,19 @@ function Profile() {
                         <h1 className="text-md">Identification Number</h1>
                         <h1 className="text-md">{user.identificationNumber}</h1>
                     </div>
+                    <Button type="primary" className="mt-4" onClick={() => setShowEditModal(true)}>Edit Profile</Button>
                 </div>
             </div>
+
+            {/* Edit Profile Modal */}
+            <Modal title="Edit Profile" open={showEditModal} onCancel={() => setShowEditModal(false)} onOk={handleSaveUser}>
+                <Input placeholder="First Name" value={editUser.firstName} onChange={(e) => setEditUser({ ...editUser, firstName: e.target.value })} className="mb-2" />
+                <Input placeholder="Last Name" value={editUser.lastName} onChange={(e) => setEditUser({ ...editUser, lastName: e.target.value })} className="mb-2" />
+                <Input placeholder="Email" value={editUser.email} onChange={(e) => setEditUser({ ...editUser, email: e.target.value })} className="mb-2" />
+                <Input placeholder="Phone Number" value={editUser.phoneNumber} onChange={(e) => setEditUser({ ...editUser, phoneNumber: e.target.value })} className="mb-2" />
+                <Input placeholder="Identification Type" value={editUser.identificationType} onChange={(e) => setEditUser({ ...editUser, identificationType: e.target.value })} className="mb-2" />
+                <Input placeholder="Identification Number" value={editUser.identificationNumber} onChange={(e) => setEditUser({ ...editUser, identificationNumber: e.target.value })} className="mb-2" />
+            </Modal>
         </div>
     );
 }

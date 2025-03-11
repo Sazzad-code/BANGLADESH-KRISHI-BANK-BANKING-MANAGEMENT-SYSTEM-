@@ -92,6 +92,28 @@ router.post("/verify-account", authMiddleware, async (req, res) => {
         });
     }
 });
+
+
+
+
+// Admin route to get all transactions
+router.post('/get-all-transactions', authMiddleware, async (req, res) => {
+    try {
+        const transactions = await Transaction.find({}).sort({ createdAt: -1 }).populate("sender").populate("receiver");
+        res.send({
+            message: 'All transactions fetched successfully',
+            data: transactions,
+            success: true
+        });
+    } catch (error) {
+        res.send({
+            message: 'Failed to fetch transactions',
+            data: error.message,
+            success: false
+        });
+    }
+});
+
 // get all transactions for a user
 
 router.post(
@@ -180,4 +202,10 @@ router.post("/deposit-funds", authMiddleware, async (req, res) => {
 
     }
 })
+
+
+
+
+
+
 module.exports = router;

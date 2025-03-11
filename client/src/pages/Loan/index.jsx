@@ -90,36 +90,37 @@ function Loan() {
         columns.push({
             title: "Actions",
             render: (text, record) => (
-                <div className="flex gap-2">
-                    <Button
-                        style={{
-                            backgroundColor: "green",
-                            color: "white",
-                            border: "none",
-                            padding: "6px 16px",
-                        }}
-                        onClick={() => handleAccept(record._id)}
-                        disabled={record.status !== "pending"}
-                    >
-                        Accept
-                    </Button>
-
-                    <Button
-                        style={{
-                            backgroundColor: "red",
-                            color: "white",
-                            border: "none",
-                            padding: "6px 16px",
-                        }}
-                        onClick={() => handleReject(record._id)}
-                        disabled={record.status !== "pending"}
-                    >
-                        Reject
-                    </Button>
-                </div>
+                record.status === "pending" ? (
+                    <div className="flex gap-2">
+                        <Button
+                            style={{
+                                backgroundColor: "green",
+                                color: "white",
+                                border: "none",
+                                padding: "6px 16px",
+                            }}
+                            onClick={() => handleAccept(record._id)}
+                        >
+                            Accept
+                        </Button>
+    
+                        <Button
+                            style={{
+                                backgroundColor: "red",
+                                color: "white",
+                                border: "none",
+                                padding: "6px 16px",
+                            }}
+                            onClick={() => handleReject(record._id)}
+                        >
+                            Reject
+                        </Button>
+                    </div>
+                ) : null
             ),
         });
     }
+    
 
     return (
         <div>

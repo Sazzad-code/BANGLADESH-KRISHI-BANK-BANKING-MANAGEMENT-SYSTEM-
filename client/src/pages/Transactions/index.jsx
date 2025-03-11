@@ -5,7 +5,7 @@ import { PlusOutlined, SwapOutlined, PrinterOutlined } from "@ant-design/icons";
 import TransferFundsModal from "./TransferFundsModal";
 import DepositeModal from "./DepositeModal";
 import { useDispatch, useSelector } from "react-redux";
-import { GetTransactionsOfUser } from "../../apicalls/transactions";
+import { GetTransactionsOfUser, GetAllTransactions } from "../../apicalls/transactions";
 import moment from "moment";
 
 const { RangePicker } = DatePicker;
@@ -74,7 +74,10 @@ function Transactions() {
     const getData = async () => {
         setLoading(true);
         try {
-            const response = await GetTransactionsOfUser();
+            const response = user.isAdmin
+                ? await GetAllTransactions()
+                : await GetTransactionsOfUser();
+
             if (response.success) {
                 setData(response.data);
                 setFilteredData(response.data);
@@ -139,13 +142,7 @@ function Transactions() {
                 <PageTitle title="Transactions" />
                 <Tooltip title="Print Transactions">
                     <Button
-                        style={{
-                            backgroundColor: " #90EE90",
-                            color: "white",
-                            border: "none",
-                            padding: "6px 16px",
-                        }}
-                        className="bg-gray-500 hover:bg-gray-600 border-none text-black"
+                        style={{ backgroundColor: "#90EE90", color: "white", border: "none" }}
                         icon={<PrinterOutlined />}
                         size="large"
                         onClick={handlePrint}
@@ -155,68 +152,28 @@ function Transactions() {
                 </Tooltip>
             </div>
 
-            {/* Centered Deposit & Transfer Buttons with More Space */}
-            <div className="flex justify-center gap-8 my-6"style={{ marginBottom: "20px" }}>
+            <div className="flex justify-center gap-8 my-6">
                 {!user.isAdmin && (
                     <>
-                        <Tooltip title="Deposit Funds">
-                            <Button
-                                className="bg-gray-500 hover:bg-gray-600 border-none text-black px-6 py-2"
-                                icon={<PlusOutlined />}
-                                size="large"
-                                onClick={() => setShowDepositModal(true)}
-                            >
-                                Deposit
-                            </Button>
-                        </Tooltip>
-
-                        <Tooltip title="Transfer Funds">
-                            <Button
-                                className="bg-gray-500 hover:bg-gray-600 border-none text-black px-6 py-2"
-                                icon={<SwapOutlined />}
-                                size="large"
-                                onClick={() => setShowTransferFundsModal(true)}
-                            >
-                                Transfer
-                            </Button>
-                        </Tooltip>
+                        <Button icon={<PlusOutlined />} onClick={() => setShowDepositModal(true)}>Deposit</Button>
+                        <Button icon={<SwapOutlined />} onClick={() => setShowTransferFundsModal(true)}>Transfer</Button>
                     </>
                 )}
             </div>
 
-            {/* Date Range Picker and Search Input in Same Row */}
-            <div className="flex justify-center items-center my-4 gap-6"style={{ marginBottom: "30px" }}>
+            <div className="flex justify-center items-center my-6 gap-8"  style={{ marginTop: "20px" }}>
                 <RangePicker onChange={filterByDate} />
                 {user.isAdmin && (
-                    <Input
-                        placeholder="Search by Transaction ID or User ID"
-                        value={searchQuery}
-                        onChange={handleSearch}
-                        style={{ width: 300 }}
-                        allowClear
-                    />
+                    <Input placeholder="Search by Transaction ID or User ID" value={searchQuery} onChange={handleSearch} allowClear />
                 )}
             </div>
 
-            {/* Transactions Table */}
-            <div ref={printRef} className="p-4 bg-white">
-                {loading ? (
-                    <div className="flex justify-center items-center">
-                        <Spin size="large" />
-                    </div>
-                ) : (
-                    <Table
-                        columns={columns}
-                        dataSource={filteredData}
-                        className="mt-2"
-                        rowKey="_id"
-                        pagination={{ pageSize: 10 }}
-                    />
-                )}
+            <div ref={printRef} className="p-4 bg-white"  style={{ marginTop: "20px" }}>
+                {loading ? <Spin size="large" /> : <Table columns={columns} dataSource={filteredData} rowKey="_id" pagination={{ pageSize: 10 }} />}
             </div>
 
-            {/* Modals */}
-            {showTransferFundsModal && (
+           {/* Modals */}
+           {showTransferFundsModal && (
                 <TransferFundsModal
                     showTransferFundsModal={showTransferFundsModal}
                     setShowTransferFundsModal={setShowTransferFundsModal}

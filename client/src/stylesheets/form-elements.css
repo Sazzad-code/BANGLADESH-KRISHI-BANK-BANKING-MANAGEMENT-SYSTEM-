@@ -4,7 +4,7 @@ input , select , textarea{
     border:1px solid rgb(86,86,86);
     padding: 8px 10px;
     width: 100%;
-
+}
 input :focus , select :focus, textarea :focus{
     border:1px solid rgb(119, 19, 19);
     outline: none;

@@ -62,3 +62,16 @@ export const UpdateUserVerifiedStatus = async(payload)=>{
         
     }
 }
+
+export const UpdateUserDetails = async (userData) => {
+    try {
+        const response = await axiosInstance.put('/api/users/update-user-details', userData, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`, // Assuming token is stored in localStorage
+            },
+        });
+        return response.data;
+    } catch (error) {
+        throw error.response?.data || error;
+    }
+};

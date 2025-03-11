@@ -21,7 +21,7 @@ function NewRequestModal({ showNewRequestModal, setShowNewRequestModal, reloadDa
             if (response.success) {
                 setShowNewRequestModal(false);
                 message.success(response.message);
-                reloadData(); // Refresh loan list
+     
             } else {
                 message.error(response.message);
             }

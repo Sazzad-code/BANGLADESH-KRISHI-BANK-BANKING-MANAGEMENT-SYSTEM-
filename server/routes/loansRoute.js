@@ -17,7 +17,9 @@ router.post("/get-all-loans-by-user", authMiddleware, async (req, res) => {
         if (user.isAdmin) {
             const requests = await Request.find()
                 .populate("sender", "firstName lastName")
-                .populate("receiver", "firstName lastName");
+                .populate("receiver", "firstName lastName")
+                .sort({ createdAt: -1 }); // Sort in descending order
+                
             return res.send({
                 data: requests,
                 message: "Requests fetched successfully",
@@ -27,7 +29,9 @@ router.post("/get-all-loans-by-user", authMiddleware, async (req, res) => {
             // Regular user: Get only the requests they have sent
             const requests = await Request.find({ sender: user._id })
                 .populate("sender", "firstName lastName")
-                .populate("receiver", "firstName lastName");
+                .populate("receiver", "firstName lastName")
+                .sort({ createdAt: -1 }); // Sort in descending order
+
             return res.send({
                 data: requests,
                 message: "Requests fetched successfully",

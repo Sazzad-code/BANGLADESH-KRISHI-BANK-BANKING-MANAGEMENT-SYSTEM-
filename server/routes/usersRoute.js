@@ -153,4 +153,49 @@ router.post('/update-user-verified-status', authMiddleware,  async(req, res)=>{
         });
     }
 })
+
+// Edit user data 
+
+// Route to update user details (only accessible by admin)
+router.put("/update-user-details", authMiddleware, async (req, res) => {
+
+    console.log('im here')
+    try {
+        const { userId, firstName, lastName, email, phoneNumber } = req.body;
+        
+        // Ensure the user is authenticated and is an admin
+        // if (!req.user || req.user.role !== 'admin') {
+        //     return res.status(403).send({
+        //         success: false,
+        //         message: "You do not have permission to perform this action.",
+        //     });
+        // }
+
+        // Find the user by userId and update their details
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { firstName, lastName, email, phoneNumber },
+            { new: true, runValidators: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).send({
+                success: false,
+                message: "User not found.",
+            });
+        }
+
+        res.send({
+            success: true,
+            message: "User details updated successfully.",
+            data: updatedUser,
+        });
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: error.message,
+        });
+    }
+});
+
 module.exports = router;

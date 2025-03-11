@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import { message } from "antd";
 import PageTitle from "../../components/PageTitle";
 import { useSelector, useDispatch } from "react-redux";
-import { GetTransactionsOfUser } from "../../apicalls/transactions";
+import { GetTransactionsOfUser, GetAllTransactionCount, fetchTotalDeposits } from "../../apicalls/transactions";
+import { GetAllUsers } from "../../apicalls/users";
 
 function Home() {
     const [transactionsCount, setTransactionsCount] = useState(0); // State to hold transaction count
+    const [userTransactionsCount, setUserTransactionsCount] = useState(0); // State to hold transaction count
+    const [userDepositCount, setUserDepositCount] = useState(0); // State to hold transaction count
+    const [usersCount, setUsersCount] = useState(0); // State to hold transaction count
     const { user } = useSelector((state) => state.users);
 
     const images = [
@@ -17,7 +21,7 @@ function Home() {
     // Fetch transactions and count them
     const getTransactionsCount = async () => {
         try {
-            const response = await GetTransactionsOfUser(); // API call to get transactions
+            const response = await GetAllTransactionCount(); // API call to get transactions
             if (response.success) {
                 setTransactionsCount(response.data.length); // Set the count based on the fetched data
             } else {
@@ -28,9 +32,45 @@ function Home() {
         }
     };
 
+    const getUserTransactionsCount = async () => {
+        try {
+            const response = await GetTransactionsOfUser(); // API call to get transactions
+            if (response.success) {
+                setUserTransactionsCount(response.data.length); // Set the count based on the fetched data
+            } else {
+                message.error("Failed to fetch transactions.");
+            }
+        } catch (error) {
+            message.error("Error fetching transactions: " + error.message);
+        }
+    };
+
+
+
+    
+    
+    
+
+    // Fetch transactions and count them
+    const getUsersCount = async () => {
+        try {
+            const response = await GetAllUsers(); // API call to get transactions
+            if (response.success) {
+                setUsersCount(response.data.length); // Set the count based on the fetched data
+            } else {
+                message.error("Failed to fetch users.");
+            }
+        } catch (error) {
+            message.error("Error fetching users: " + error.message);
+        }
+    };
+
     useEffect(() => {
         if (user) {
             getTransactionsCount(); // Fetch transactions count when user is available
+            getUsersCount(); // Fetch users count when user is available
+            getUserTransactionsCount();
+        
         }
     }, [user]);
 
@@ -49,20 +89,15 @@ function Home() {
 
 
             {/* Conditional Rendering: Hide Dashboard for Admin */}
-            {!user.isAdmin && (
-                <div className="dashboard-container">
-                    {/* Account Number Card */}
-                    <div className="card account-card">
-                        <h2>Account Number</h2>
-                        <p>{user._id}</p>
+            {user.isAdmin ? (
+    <div className="admin-dashboard">
+        
+        <div className="card account-card">
+                        <h2>Users</h2>
+                        <p>{usersCount}</p>
                     </div>
 
-                    {/* Balance Card */}
-                    <div className="card balance-card">
-                        <h2>Balance</h2>
-                        <p>BDT {user.balance || 0}</p>
-                    </div>
-
+                    
                    
 
                     {/* Help Line Card */}
@@ -76,8 +111,35 @@ function Home() {
                         <h2>Recent Transactions</h2>
                         <p>{transactionsCount} transactions</p>
                     </div>
-                </div>
-                
+    </div>
+) : (
+    <div className="dashboard-container">
+                    {/* Account Number Card */}
+                    <div className="card account-card">
+                        <h2>Account Number</h2>
+                        <p>{user._id}</p>
+                    </div>
+
+                    {/* Balance Card */}
+                    <div className="card balance-card">
+                        <h2>Balance</h2>
+                        <p>BDT {user.balance || 0}</p>
+                    </div>
+
+                    {/* Help Line Card */}
+                    <div className="card help-card">
+                        <h2>Help Line</h2>
+                        <p>{Number} 01862484807 bkb@gmail.com</p>
+                    </div>
+
+                    {/* Transactions Card */}
+                    <div className="card transactions-card">
+                        <h2>Recent Transactions</h2>
+                        <p>{userTransactionsCount} transactions</p>
+                    </div>
+          
+    </div>
+      
             )}
 
             {/* Bank Introduction Section */}
